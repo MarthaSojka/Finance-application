@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <div class="mb-5">
+            A share of {{ stock["symbol"] }} costs {{ usd(stock["price"]) }}.
+    </div>
+    <div class="mb-5">
+        Your cash balanse is {{ usd(cash) }}.
+    </div>
+    <hr>
+    {% if cash > stock["price"] %}
+        <div class="mb-3">
+            You can buy shares of {{ stock["symbol"] }} now:
+        </div>
+        <form action="/buy" method="post">
+            <div class="mb-5">
+                <input name="symbol" placeholder="Symbol" type="hidden" value="{{ stock['symbol'] }}">
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="shares" placeholder="Shares" type="number" min="1">
+            </div>
+            <div class="mb-5">
+                <button class="btn btn-primary" type="submit">Buy</button>
+            </div>
+        </form>
+        <hr>
+    {% else %}
+        <div class="mb-5">
+            You can't afford buying it.
+        </div>
+        <hr>
+    {% endif %}
+    {% if symbol_exists and share_owned > 0 %}
+        <form action="/sell" method="post">
+            <div class="mb-3">
+                You have {{ share_owned }} shares of {{ stock["symbol"] }} on your stock purchased for {{ usd(stock["price"]) }}.
+            </div>
+            <div class="mb-3">
+                You can sell them now:
+            </div>
+            <div class="mb-3">
+                <input name="symbol" placeholder="Symbol" type="hidden" value="{{ stock['symbol'] }}">
+            </div>
+            <div class="mb-3">
+                <input class="form-control mx-auto w-auto" autocomplete="off" name="shares" placeholder="Shares" type="number" min="1">
+            </div>
+            <div class="mb-5">
+                <button class="btn btn-primary" type="submit">Sell</button>
+            </div>
+        </form>
+        <hr>
+    {% endif %}
+{% endblock %}

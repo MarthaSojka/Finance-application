@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My profile
+{% endblock %}
+
+{% block main %}
+    <form action="/myprofile" method="post">
+        <div class="mb-3 profile">
+            <table class="table profile-table">
+                <tr>
+                    <td class="text-end column-width">Your name</td>
+                    <td class="text-start">{{ username }}</td>
+                </tr>
+                <tr>
+                    <td class="text-end column-width">Your cash balance</td>
+                    <td class="text-start">{{ usd(cash) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-end column-width">Top up your account $</td>
+                    <td class="text-start"><input class="form-control w-auto" name="topup" placeholder="$ Top Up" type="number" min="50" step="50"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mb-5 profile">
+            <button class="btn btn-primary" type="submit" name="action" value="Top Up">Top Up</button>
+        </div>
+        <div class="mb-3 profile">
+            <table class="table profile-table">
+                <tr>
+                    <td class="text-end column-width">Change password</td>
+                    <td class="text-start"><input class="form-control w-auto" name="password" placeholder="Password" type="password"></td>
+                </tr>
+                <tr>
+                    <td class="text-end column-width">Confirm password</td>
+                    <td class="text-start"><input class="form-control w-auto" name="confirmation" placeholder="Password" type="password"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mb-5 profile">
+            <button class="btn btn-primary" type="submit" name="action" value="Change Password">Change password</button>
+        </div>
+    </form>
+{% endblock %}

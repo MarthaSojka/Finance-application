@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Symbol</th>
+                <th class="text-end">Shares</th>
+                <th class="text-end">Purchase Price </th>
+                <th class="text-end">Actual Price</th>
+                <th class="text-end">Your Profit</th>
+                <th class="text-end">TOTAL</th>
+                <th class="text-end pad">Buy Now</th>
+                <th class="text-end pad">Sell Now</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                {% if total_shares[transaction['symbol']] > 0 %}
+                <tr>
+                    <td class="text-start">{{ transaction['symbol'] }}</td>
+                    <td class="text-end">{{ total_shares[transaction['symbol']] }}</td>
+                    <td class="text-end">{{ usd(purchase_price[transaction['symbol']]) }}</td>
+                    <td class="text-end">{{ usd(current_price[transaction['symbol']]) }}</td>
+                    <td class="text-end {{ 'green' if percentage_change[transaction['symbol']] >= 0 else 'red' }}">{{ "{:.2f}%".format(percentage_change[transaction['symbol']]) }}</td>
+                    <td class="text-end">{{ usd(total_shares[transaction['symbol']] * current_price[transaction['symbol']]) }}</td>
+                    <td class="text-end">
+                        <form action="/buy" method="get">
+                            <input name="symbol" placeholder="Symbol" type="hidden" value="{{ transaction['symbol'] }}">
+                            <button class="btn btn-primary" type="submit" value="Buy now">Buy now</button>
+                        </form>
+                    </td>
+                    <td class="text-end">
+                        <form action="/sell" method="get">
+                            <input name="symbol" placeholder="Symbol" type="hidden" value="{{ transaction['symbol'] }}">
+                            <button class="btn btn-primary" type="submit" value="Sell now">Sell now</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="5">Cash</td>
+                <td class="border-0 w-bold text-end">{{ usd(user_cash) }}</td>
+                <td class="border-0 w-bold text-end" colspan="2"></td>
+            </tr>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="5">TOTAL</td>
+                <td class="border-0 w-bold text-end">{{ usd(total) }}</td>
+                <td class="border-0 w-bold text-end" colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}
